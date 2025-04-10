@@ -35,36 +35,36 @@ export function handleTransfer(event: TransferEvent): void {
 	ev.value       = decimals.toDecimals(event.params.value, contract.decimals)
 	ev.valueExact  = event.params.value
 
-	// if (event.params.from == Address.zero()) {
-	// 	let totalSupply        = fetchERC20Balance(contract, null)
-	// 	totalSupply.valueExact = totalSupply.valueExact.plus(event.params.value)
-	// 	totalSupply.value      = decimals.toDecimals(totalSupply.valueExact, contract.decimals)
-	// 	totalSupply.save()
-	// } else {
-	// 	let from               = fetchAccount(event.params.from)
-	// 	let balance            = fetchERC20Balance(contract, from)
-	// 	balance.valueExact     = balance.valueExact.minus(event.params.value)
-	// 	balance.value          = decimals.toDecimals(balance.valueExact, contract.decimals)
-	// 	balance.save()
+	if (event.params.from == Address.zero()) {
+		let totalSupply        = fetchERC20Balance(contract, null)
+		totalSupply.valueExact = totalSupply.valueExact.plus(event.params.value)
+		totalSupply.value      = decimals.toDecimals(totalSupply.valueExact, contract.decimals)
+		totalSupply.save()
+	} else {
+		let from               = fetchAccount(event.params.from)
+		let balance            = fetchERC20Balance(contract, from)
+		balance.valueExact     = balance.valueExact.minus(event.params.value)
+		balance.value          = decimals.toDecimals(balance.valueExact, contract.decimals)
+		balance.save()
 
-	// 	ev.from                = from.id
-	// 	ev.fromBalance         = balance.id
-	// }
+		ev.from                = from.id
+		ev.fromBalance         = balance.id
+	}
 
-	// if (event.params.to == Address.zero()) {
-	// 	let totalSupply        = fetchERC20Balance(contract, null)
-	// 	totalSupply.valueExact = totalSupply.valueExact.minus(event.params.value)
-	// 	totalSupply.value      = decimals.toDecimals(totalSupply.valueExact, contract.decimals)
-	// 	totalSupply.save()
-	// } else {
-	// 	let to                 = fetchAccount(event.params.to)
-	// 	let balance            = fetchERC20Balance(contract, to)
-	// 	balance.valueExact     = balance.valueExact.plus(event.params.value)
-	// 	balance.value          = decimals.toDecimals(balance.valueExact, contract.decimals)
-	// 	balance.save()
+	if (event.params.to == Address.zero()) {
+		let totalSupply        = fetchERC20Balance(contract, null)
+		totalSupply.valueExact = totalSupply.valueExact.minus(event.params.value)
+		totalSupply.value      = decimals.toDecimals(totalSupply.valueExact, contract.decimals)
+		totalSupply.save()
+	} else {
+		let to                 = fetchAccount(event.params.to)
+		let balance            = fetchERC20Balance(contract, to)
+		balance.valueExact     = balance.valueExact.plus(event.params.value)
+		balance.value          = decimals.toDecimals(balance.valueExact, contract.decimals)
+		balance.save()
 
-	// 	ev.to                  = to.id
-	// 	ev.toBalance           = balance.id
-	// }
+		ev.to                  = to.id
+		ev.toBalance           = balance.id
+	}
 	ev.save()
 }
