@@ -1,0 +1,43 @@
+specVersion: 0.0.5
+schema:
+  file: schema.graphql
+dataSources:
+  - name: StandardToken
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      address: "0xdAC17F958D2ee523a2206206994597C13D831ec7"
+      abi: ERC20
+      startBlock: 22200000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: StandardToken/StandardToken.wasm
+      entities:
+        - TransferEvent
+      abis:
+        - name: ERC20
+          file: StandardToken/ERC20.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+templates:
+  - name: StandardToken
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: ERC20
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: StandardToken/StandardToken.wasm
+      entities:
+        - TransferEvent
+      abis:
+        - name: ERC20
+          file: StandardToken/ERC20.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
