@@ -1,0 +1,6 @@
+{
+      "sepolia": {
+        "node": "http://localhost:8020",
+        "rpc": "https://realio-testnet-json.rpc.decentrio.ventures:443"
+      }
+    }
