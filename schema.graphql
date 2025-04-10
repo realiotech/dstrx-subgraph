@@ -1,250 +1,52 @@
-#
-# Provides information about an Ethereum account
-#
 type Account @entity(immutable: false) {
-  " Equals to: <accountAddress>"
-  id: ID!
-
-  " Account address "
-  address: Bytes!
-
-  " Token balances that this account holds "
-  balances: [AccountBalance!]! @derivedFrom(field: "account")
+	id: Bytes!
+	asERC20: ERC20Contract
+	ERC20balances: [ERC20Balance!]! @derivedFrom(field: "account")
+	ERC20transferFromEvent: [ERC20Transfer!]! @derivedFrom(field: "from")
+	ERC20transferToEvent: [ERC20Transfer!]! @derivedFrom(field: "to")
+	events: [Event!]! @derivedFrom(field: "emitter")
 }
-
-#
-# Current token balance of a particular Ethereum account
-#
-type AccountBalance @entity(immutable: false) {
-  " Equals to: <accountAddress>-<tokenAddress>"
-  id: ID!
-
-  " Account address "
-  account: Account!
-
-  " Token address "
-  token: Token!
-
-  " Current account balance "
-  amount: BigDecimal!
-
-  " Block number in which the balance was last modified "
-  block: BigInt
-
-  " Last modified timestamp in seconds "
-  modified: BigInt
-
-  " Hash of the last transaction that modified the balance "
-  transaction: Bytes
+type ERC20Contract @entity(immutable: true) {
+	id: Bytes!
+	asAccount: Account!
+	name: String
+	symbol: String
+	decimals: Int!
+	totalSupply: ERC20Balance!
+	balances: [ERC20Balance!]! @derivedFrom(field: "contract")
+	transfers: [ERC20Transfer!]! @derivedFrom(field: "contract")
 }
-
-#
-# Token balance of a particular Ethereum account in a certain timestamp. This entity is used to
-# provide information about evolution of account balances
-#
-type AccountBalanceSnapshot @entity(immutable: false) {
-  " Equals to: <accountAddress>-<tokenAddress>-<timestamp>"
-  id: ID!
-
-  " Account address "
-  account: Account!
-
-  " Token addess "
-  token: Token!
-
-  " Account balance "
-  amount: BigDecimal!
-
-  # TODO: Add description and check if could be non-optional
-  event: TokenEvent
-
-  " Block number "
-  block: BigInt!
-
-  " Timestamp in seconds "
-  timestamp: BigInt!
-
-  " Transaction hash "
-  transaction: Bytes!
+type ERC20Balance @entity(immutable: false) {
+	id: ID!
+	contract: ERC20Contract!
+	account: Account
+	value: BigDecimal!
+	valueExact: BigInt!
+	transferFromEvent: [ERC20Transfer!]! @derivedFrom(field: "fromBalance")
+	transferToEvent: [ERC20Transfer!]! @derivedFrom(field: "toBalance")
 }
-
-#
-# Provides information about an ERC20 token
-#
-type Token @entity(immutable: false) {
-  id: ID!
-
-  " Token address "
-  address: Bytes!
-
-  " Number of decimals the token uses "
-  decimals: Int!
-
-  " Human-readable name of the token "
-  name: String!
-
-  " Symbol of the token "
-  symbol: String!
-
-  " Token description "
-  description: String
-
-  " Image URL "
-  imageUrl: String
-
-  " Token flags"
-  flags: [String!]!
-
-  " If token transfers are paused "
-  paused: Boolean
-
-  # TODO: Number of token holders
-  # holderCount: BigInt!
-
-  " Total number of events (all types)"
-  eventCount: BigInt!
-
-  " Total number of burn events "
-  burnEventCount: BigInt!
-
-  " Total number of mint events "
-  mintEventCount: BigInt!
-
-  " Total number of transfer events "
-  transferEventCount: BigInt!
-
-  " Total token supply "
-  totalSupply: BigDecimal!
-
-  " Total token burned "
-  totalBurned: BigDecimal!
-
-  " Total token minted "
-  totalMinted: BigDecimal!
-
-  " Total token transferred "
-  totalTransferred: BigDecimal!
-
-  " List of token events "
-  events: [TokenEvent!]! @derivedFrom(field: "token")
+type ERC20Transfer implements Event @entity(immutable: true) {
+	id: ID!
+	emitter: Account!
+	transaction: Transaction!
+	timestamp: BigInt!
+	contract: ERC20Contract!
+	from: Account
+	fromBalance: ERC20Balance
+	to: Account
+	toBalance: ERC20Balance
+	value: BigDecimal!
+	valueExact: BigInt!
 }
-
-#
-# Token events
-#
-interface TokenEvent {
-  id: ID!
-  token: Token!
-  amount: BigDecimal!
-  sender: Bytes!
-
-  block: BigInt!
-  timestamp: BigInt!
-  transaction: Bytes!
+interface Event {
+	id: ID!
+	transaction: Transaction!
+	emitter: Account!
+	timestamp: BigInt!
 }
-
-type BurnEvent implements TokenEvent @entity(immutable: false) {
-  id: ID!
-
-  " Token address "
-  token: Token!
-
-  " Quantity of tokens burned "
-  amount: BigDecimal!
-
-  " Transaction sender address "
-  sender: Bytes!
-
-  " Address of burner account "
-  burner: Bytes!
-
-  " Block number "
-  block: BigInt!
-
-  " Event timestamp "
-  timestamp: BigInt!
-
-  " Transaction hash "
-  transaction: Bytes!
-}
-
-type MintEvent implements TokenEvent @entity(immutable: false) {
-  id: ID!
-
-  " Token address "
-  token: Token!
-
-  " Quantity of tokens minted "
-  amount: BigDecimal!
-
-  " Transaction sender address "
-  sender: Bytes!
-
-  " Address of minter account "
-  minter: Bytes!
-
-  " Address of destination account "
-  destination: Bytes!
-
-  " Block number "
-  block: BigInt!
-
-  " Event timestamp "
-  timestamp: BigInt!
-
-  " Transaction hash "
-  transaction: Bytes!
-}
-
-type TransferEvent implements TokenEvent @entity(immutable: false) {
-  id: ID!
-
-  " Token address "
-  token: Token!
-
-  " Quantity of tokens transferred "
-  amount: BigDecimal!
-
-  " Transaction sender address "
-  sender: Bytes!
-
-  " Address of source account "
-  source: Bytes!
-
-  " Address of destination account "
-  destination: Bytes!
-
-  " Block number "
-  block: BigInt!
-
-  " Event timestamp "
-  timestamp: BigInt!
-
-  " Transaction hash "
-  transaction: Bytes!
-}
-
-type PauseEvent implements TokenEvent @entity(immutable: false) {
-  id: ID!
-
-  " Token address "
-  token: Token!
-
-  " Greater than zero if token is paused "
-  amount: BigDecimal!
-
-  " Transaction sender address "
-  sender: Bytes!
-
-  " Address of pauser account "
-  pauser: Bytes!
-
-  " Block number "
-  block: BigInt!
-
-  " Event timestamp "
-  timestamp: BigInt!
-
-  " Transaction hash "
-  transaction: Bytes!
+type Transaction @entity(immutable: true) {
+	id: ID!
+	timestamp: BigInt!
+	blockNumber: BigInt!
+	events: [Event!]! @derivedFrom(field: "transaction")
 }
