@@ -24,8 +24,8 @@ export function handleTransfer(event: Transfer): void {
   if (token != null) {
     let amount = toDecimal(event.params.value, token.decimals)
 
-    let isBurn = token.flags.includes('burnable-transfer') && event.params.to.toHex() == GENESIS_ADDRESS
-    let isMint = token.flags.includes('mintable-transfer') && event.params.from.toHex() == GENESIS_ADDRESS
+    let isBurn = event.params.to.toHex() == GENESIS_ADDRESS
+    let isMint = event.params.from.toHex() == GENESIS_ADDRESS
     let isTransfer = !isBurn && !isMint
 
     // Update token event logs
@@ -126,30 +126,6 @@ export function handleMint(event: Mint): void {
     // To provide information about evolution of account balances
     saveAccountBalanceSnapshot(accountBalance, eventEntity.id, event)
   }
-}
-
-export function handlePause(event: Pause): void {
-  let token = Token.load(event.address.toHex())
-
-  handlePauseEvent(token, true, event)
-}
-
-export function handlePaused(event: Paused): void {
-  let token = Token.load(event.address.toHex())
-
-  handlePauseEvent(token, true, event)
-}
-
-export function handleUnpause(event: Unpause): void {
-  let token = Token.load(event.address.toHex())
-
-  handlePauseEvent(token, false, event)
-}
-
-export function handleUnpaused(event: Unpaused): void {
-  let token = Token.load(event.address.toHex())
-
-  handlePauseEvent(token, false, event)
 }
 
 function handleBurnEvent(token: Token | null, amount: BigDecimal, burner: Bytes, event: ethereum.Event): BurnEvent {
