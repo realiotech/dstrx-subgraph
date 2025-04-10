@@ -24,16 +24,16 @@ export function fetchERC20(address: Address): ERC20Contract {
 	let contract = ERC20Contract.load(address)
 
 	if (contract == null) {
-		let endpoint         = ERC20.bind(address)
-		let name             = endpoint.try_name()
-		let symbol           = endpoint.try_symbol()
-		let decimals         = endpoint.try_decimals()
+		// let endpoint         = ERC20.bind(address)
+		// let name             = endpoint.try_name()
+		// let symbol           = endpoint.try_symbol()
+		// let decimals         = endpoint.try_decimals()
 
 		// Common
 		contract             = new ERC20Contract(address)
-		contract.name        = name.reverted     ? null : name.value
-		contract.symbol      = symbol.reverted   ? null : symbol.value
-		contract.decimals    = decimals.reverted ? 18   : decimals.value
+		contract.name        = null
+		contract.symbol      = null
+		contract.decimals    = 18
 		contract.totalSupply = fetchERC20Balance(contract as ERC20Contract, null).id
 		contract.asAccount   = address
 		contract.save()
