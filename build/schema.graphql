@@ -6,7 +6,7 @@ type Account @entity(immutable: false) {
 	ERC20transferToEvent: [ERC20Transfer!]! @derivedFrom(field: "to")
 	events: [Event!]! @derivedFrom(field: "emitter")
 }
-type ERC20Contract @entity(immutable: true) {
+type ERC20Contract @entity(immutable: false) {
 	id: Bytes!
 	asAccount: Account!
 	name: String
