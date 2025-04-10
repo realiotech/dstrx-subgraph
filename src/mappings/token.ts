@@ -75,6 +75,29 @@ export function handleTransfer(event: Transfer): void {
       // To provide information about evolution of account balances
       saveAccountBalanceSnapshot(accountBalance, eventEntityId, event)
     }
+  } else {
+    token = new Token(event.address.toHex())
+    token.address = event.address
+
+    token.eventCount = ZERO
+    token.burnEventCount = ZERO
+    token.mintEventCount = ZERO
+    token.transferEventCount = ZERO
+
+    token.totalSupply = ZERO.toBigDecimal()
+    token.totalBurned = ZERO.toBigDecimal()
+    token.totalMinted = ZERO.toBigDecimal()
+    token.totalTransferred = ZERO.toBigDecimal()
+
+    // log.debug('Adding token to registry, name: {}, symbol: {}, address: {}, decimals: {}, flags: {}', [
+    //   token.name,
+    //   token.symbol,
+    //   token.id,
+    //   decimals.toString(), // TODO: use token.decimals.toString() when type 'i32' implements toString()
+    //   token.flags.length ? token.flags.join('|') : 'none',
+    // ])
+
+    token.save()
   }
 }
 
