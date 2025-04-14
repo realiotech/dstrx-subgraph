@@ -80,4 +80,5 @@ export function handleTransfer(event: TransferEvent): void {
 		ev.toBalance           = balance.id
 	}
 	ev.save()
+  contract.save()
 }
