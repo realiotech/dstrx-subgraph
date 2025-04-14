@@ -37,11 +37,15 @@ export function handleTransfer(event: TransferEvent): void {
 	ev.value       = decimals.toDecimals(event.params.value, contract.decimals)
 	ev.valueExact  = event.params.value
 
+  let mint = false
+  let burn = false
+
 	if (event.params.from == Address.zero()) {
 		let totalSupply        = fetchERC20Balance(contract, null)
 		totalSupply.valueExact = totalSupply.valueExact.plus(event.params.value)
 		totalSupply.value      = decimals.toDecimals(totalSupply.valueExact, contract.decimals)
     contract.mintCount = contract.mintCount + 1
+    mint = true
 		totalSupply.save()
 	} else {
 		let from               = fetchAccount(event.params.from)
@@ -63,6 +67,7 @@ export function handleTransfer(event: TransferEvent): void {
 		totalSupply.valueExact = totalSupply.valueExact.minus(event.params.value)
 		totalSupply.value      = decimals.toDecimals(totalSupply.valueExact, contract.decimals)
     contract.burnCount = contract.burnCount + 1
+    burn = true
 		totalSupply.save()
 	} else {
 		let to                 = fetchAccount(event.params.to)
@@ -71,7 +76,6 @@ export function handleTransfer(event: TransferEvent): void {
     if (balance.valueExact.equals(BigInt.zero())) {
       contract.holders = contract.holders + 1
     }
-    contract.transfersCount = contract.transfersCount + 1
 		balance.valueExact     = balance.valueExact.plus(event.params.value)
 		balance.value          = decimals.toDecimals(balance.valueExact, contract.decimals)
 		balance.save()
@@ -80,5 +84,8 @@ export function handleTransfer(event: TransferEvent): void {
 		ev.toBalance           = balance.id
 	}
 	ev.save()
+  if (!mint && !burn) {
+    contract.transfersCount = contract.transfersCount + 1
+  }
   contract.save()
 }
