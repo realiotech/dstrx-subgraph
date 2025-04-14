@@ -36,6 +36,10 @@ export function fetchERC20(address: Address): ERC20Contract {
 		contract.decimals    = 18
 		contract.totalSupply = fetchERC20Balance(contract as ERC20Contract, null).id
 		contract.asAccount   = address
+		contract.holders = 0
+		contract.transfersCount = 0
+		contract.mintCount = 0
+		contract.burnCount = 0
 		contract.save()
 
 		let account          = fetchAccount(address)
