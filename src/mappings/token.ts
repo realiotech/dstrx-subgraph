@@ -1,5 +1,7 @@
 import {
 	Address,
+  BigDecimal,
+  BigInt,
 } from '@graphprotocol/graph-ts'
 
 import {
@@ -39,6 +41,7 @@ export function handleTransfer(event: TransferEvent): void {
 		let totalSupply        = fetchERC20Balance(contract, null)
 		totalSupply.valueExact = totalSupply.valueExact.plus(event.params.value)
 		totalSupply.value      = decimals.toDecimals(totalSupply.valueExact, contract.decimals)
+    contract.mintCount = contract.mintCount + 1
 		totalSupply.save()
 	} else {
 		let from               = fetchAccount(event.params.from)
@@ -46,6 +49,10 @@ export function handleTransfer(event: TransferEvent): void {
 		balance.valueExact     = balance.valueExact.minus(event.params.value)
 		balance.value          = decimals.toDecimals(balance.valueExact, contract.decimals)
 		balance.save()
+
+    if (balance.value.equals(BigDecimal.zero())) {
+      contract.holders = contract.holders - 1
+    }
 
 		ev.from                = from.id
 		ev.fromBalance         = balance.id
@@ -55,10 +62,16 @@ export function handleTransfer(event: TransferEvent): void {
 		let totalSupply        = fetchERC20Balance(contract, null)
 		totalSupply.valueExact = totalSupply.valueExact.minus(event.params.value)
 		totalSupply.value      = decimals.toDecimals(totalSupply.valueExact, contract.decimals)
+    contract.burnCount = contract.burnCount + 1
 		totalSupply.save()
 	} else {
 		let to                 = fetchAccount(event.params.to)
 		let balance            = fetchERC20Balance(contract, to)
+
+    if (balance.valueExact.equals(BigInt.zero())) {
+      contract.holders = contract.holders + 1
+    }
+    contract.transfersCount = contract.transfersCount + 1
 		balance.valueExact     = balance.valueExact.plus(event.params.value)
 		balance.value          = decimals.toDecimals(balance.valueExact, contract.decimals)
 		balance.save()

@@ -6,9 +6,9 @@ dataSources:
     kind: ethereum/contract
     network: mainnet
     source:
-      address: "0x3e70f6806171873d17d4bfc984a6f9d20f5a9018"
+      address: "0xcC2bcdA0674252Bc65b185EB25C31FE7157AD30A"
       abi: ERC20
-      startBlock: 18700000
+      startBlock: 889500
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6

@@ -15,6 +15,10 @@ type ERC20Contract @entity(immutable: false) {
 	totalSupply: ERC20Balance!
 	balances: [ERC20Balance!]! @derivedFrom(field: "contract")
 	transfers: [ERC20Transfer!]! @derivedFrom(field: "contract")
+  holders: Int!
+  transfersCount: Int!
+  mintCount: Int!
+  burnCount: Int!
 }
 type ERC20Balance @entity(immutable: false) {
 	id: ID!
@@ -35,6 +39,28 @@ type ERC20Transfer implements Event @entity(immutable: true) {
 	fromBalance: ERC20Balance
 	to: Account
 	toBalance: ERC20Balance
+	value: BigDecimal!
+	valueExact: BigInt!
+}
+type ERC20Mint implements Event @entity(immutable: true) {
+	id: ID!
+	emitter: Account!
+	transaction: Transaction!
+	timestamp: BigInt!
+	contract: ERC20Contract!
+  to: Account
+	toBalance: ERC20Balance
+	value: BigDecimal!
+	valueExact: BigInt!
+}
+type ERC20Burn implements Event @entity(immutable: true) {
+	id: ID!
+	emitter: Account!
+	transaction: Transaction!
+	timestamp: BigInt!
+	contract: ERC20Contract!
+	from: Account
+	fromBalance: ERC20Balance
 	value: BigDecimal!
 	valueExact: BigInt!
 }
