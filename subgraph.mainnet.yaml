@@ -4,11 +4,11 @@ schema:
 dataSources:
   - name: StandardToken
     kind: ethereum/contract
-    network: testnet
+    network: mainnet
     source:
-      address: "0xcC2bcdA0674252Bc65b185EB25C31FE7157AD30A"
+      address: "0xb841F365D5221Bed66d60E69094418D8C2aa5A44"
       abi: ERC20
-      startBlock: 889500
+      startBlock: 11978000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6

@@ -7,9 +7,11 @@
     "codegen": "graph codegen",
     "build": "graph build",
     "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ graphprotocol/erc20-subgraph",
-    "create-local": "graph create --node http://localhost:8020/ graphprotocol/erc20-subgraph",
+    "create-testnet": "graph create --node http://localhost:8020/ strd-testnet-subgraph",
+    "create-mainnet": "graph create --node http://localhost:8020/ strd-mainnet-subgraph",
     "remove-local": "graph remove --node http://localhost:8020/ graphprotocol/erc20-subgraph",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 graphprotocol/erc20-subgraph"
+    "deploy-testnet": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 strd-testnet-subgraph subgraph.testnet.yaml",
+    "deploy-mainnet": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 strd-mainnet-subgraph subgraph.mainnet.yaml" 
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.97.0",

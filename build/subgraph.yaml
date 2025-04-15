@@ -4,7 +4,7 @@ schema:
 dataSources:
   - name: StandardToken
     kind: ethereum/contract
-    network: mainnet
+    network: testnet
     source:
       address: "0xcC2bcdA0674252Bc65b185EB25C31FE7157AD30A"
       abi: ERC20
