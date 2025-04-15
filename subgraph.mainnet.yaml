@@ -8,7 +8,7 @@ dataSources:
     source:
       address: "0xb841F365D5221Bed66d60E69094418D8C2aa5A44"
       abi: ERC20
-      startBlock: 11978000
+      startBlock: 11000000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
