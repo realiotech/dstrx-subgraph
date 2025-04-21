@@ -61,9 +61,7 @@ services:
 
 * We should run mainnet/testnet node on separate servers
 
-* Create and deploy your graph
-
-Clone project to same host and
+* Create and deploy your graphs, clone project to same host and
 
 ```bash
 # testnet network
