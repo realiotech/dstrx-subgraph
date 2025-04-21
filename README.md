@@ -6,7 +6,7 @@
 
 ```bash
 
-git clone https://github.com/hieuvubk/graph-node
+git clone https://github.com/decentrio/graph-node
 
 git checkout mainnet/testnet for mainnet/testnet branch
 
