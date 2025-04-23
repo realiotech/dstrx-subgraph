@@ -59,11 +59,11 @@ jobs:
         ref: main
     - name: Update Kubernetes manifest
       run: |
-        if cat explorer-dstrx-subgraph/base/deployment.yaml | grep ${{ github.sha }}-${{ github.run_number }}-${{ github.run_attempt }}; then
+        if cat explorer-graph-node/base/dstrx-subgraph-job.yaml | grep ${{ github.sha }}-${{ github.run_number }}-${{ github.run_attempt }}; then
           echo "Image tag already exists in the manifest"
           exit 0
         fi
-        sed -i 's|image: .*$|image: '"registry.digitalocean.com/kubernetes-stage/dstrx-subgraph:${{ github.sha }}-${{ github.run_number }}-${{ github.run_attempt }}"'|' explorer-dstrx-subgraph/base/deployment.yaml
+        sed -i 's|image: .*$|image: '"registry.digitalocean.com/kubernetes-stage/dstrx-subgraph:${{ github.sha }}-${{ github.run_number }}-${{ github.run_attempt }}"'|' explorer-graph-node/base/dstrx-subgraph-job.yaml.yaml
         git config user.name 'github-actions-bot'
         git config user.email 'devops@realio.fund'
         git add .

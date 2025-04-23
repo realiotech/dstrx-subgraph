@@ -12,10 +12,11 @@ RUN npm ci
 
 # Copy the rest of the application code
 COPY . .
+COPY --chmod=755 docker/start /usr/local/bin/start
 
 # Build the Next.js app
 RUN npm run codegen
 RUN npm run build
 
 # create-testnet and deploy-testnet reuire access to the graph node and ipfs
-ENTRYPOINT ["npm", "run", "create-mainnet", "&&", "npm", "run", "deploy-mainnet"]
+ENTRYPOINT ["start"]

@@ -1,6 +1,6 @@
 .gitignore
 .git
-Dockerfile
+docker
 .dockerignore
 README.md
 subgraph.testnet.yaml
