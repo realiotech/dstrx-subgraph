@@ -1,4 +1,4 @@
-name: prod-backend
+name: mainnet
 
 on:
   push:
@@ -6,25 +6,9 @@ on:
       - main
     paths:
       - '**'
-      - '!apps/'
-      - 'apps/backend/**'
-      - '!.github/**'
-      - '!.gitignore'
-      - '!CHANGELOG.md'
-      - '!README.md'
-      - '!.vscode/**'
-  pull_request:
-    branches:
-      - main
-    paths:
-      - '**'
-      - '!apps/'
-      - 'apps/backend/**'
-      - '!.github/**'
-      - '!.gitignore'
-      - '!CHANGELOG.md'
-      - '!README.md'
-      - '!.vscode/**'
+      - '!docker/testnet*'
+      - '!subgraph.testnet.yaml'
+      - '!subgraph.yaml'
   workflow_dispatch:
 
 jobs:
@@ -56,10 +40,10 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: ${{ vars.DO_IMAGE_REGISTRY_URL }}/kubernetes-prod/districts-app-be:${{ github.sha }}-${{ github.run_number }}-${{ github.run_attempt }}
+          tags: ${{ vars.DO_IMAGE_REGISTRY_URL }}/kubernetes-prod/dstrx-subgraph:${{ github.sha }}-${{ github.run_number }}-${{ github.run_attempt }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          file: apps/backend/Dockerfile
+          file: docker/mainnet.Dockerfile
   update-gitops:
     if: github.event_name != 'pull_request'
     needs: build
@@ -74,11 +58,11 @@ jobs:
         ref: main
     - name: Update Kubernetes manifest
       run: |
-        if cat districts-app-be/overlays/prod/deployment.yaml | grep ${{ github.sha }}-${{ github.run_number }}-${{ github.run_attempt }}; then
+        if cat explorer-dstrx-subgraph/base/deployment.yaml | grep ${{ github.sha }}-${{ github.run_number }}-${{ github.run_attempt }}; then
           echo "Image tag already exists in the manifest"
           exit 0
         fi
-        sed -i 's|image: .*$|image: '"registry.digitalocean.com/kubernetes-prod/districts-app-be:${{ github.sha }}-${{ github.run_number }}-${{ github.run_attempt }}"'|' districts-app-be/overlays/prod/deployment.yaml
+        sed -i 's|image: .*$|image: '"registry.digitalocean.com/kubernetes-prod/dstrx-subgraph:${{ github.sha }}-${{ github.run_number }}-${{ github.run_attempt }}"'|' explorer-dstrx-subgraph/base/deployment.yaml
         git config user.name 'github-actions-bot'
         git config user.email 'devops@realio.fund'
         git add .
