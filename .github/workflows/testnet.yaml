@@ -6,6 +6,7 @@ on:
       - stage
     paths:
       - '**'
+      - '!.github/**'
       - '!docker/mainnet*'
       - '!subgraph.mainnet.yaml'
       - '!subgraph.yaml'

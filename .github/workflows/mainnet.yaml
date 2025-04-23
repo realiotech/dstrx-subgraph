@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - '**'
+      - '!.github/**'
       - '!docker/testnet*'
       - '!subgraph.testnet.yaml'
       - '!subgraph.yaml'
