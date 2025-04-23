@@ -1,0 +1,3 @@
+#!/bin/sh
+npm run create-testnet
+npm run deploy-testnet
