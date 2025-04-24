@@ -1,3 +1,11 @@
 #!/bin/sh
-npm run create-testnet
-npm run deploy-testnet
+if [ "$1" = "testnet" ]; then
+    npm run create-testnet
+    npm run deploy-testnet
+elif [ "$1" = "mainnet" ]; then
+    npm run create-mainnet
+    npm run deploy-mainnet
+else
+    echo "Please specify either 'testnet' or 'mainnet' as an argument"
+    exit 1
+fi

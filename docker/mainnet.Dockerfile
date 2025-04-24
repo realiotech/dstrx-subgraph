@@ -19,4 +19,4 @@ RUN npm run codegen
 RUN npm run build
 
 # create-testnet and deploy-testnet reuire access to the graph node and ipfs
-ENTRYPOINT ["start"]
+ENTRYPOINT ["start", "mainnet"]
