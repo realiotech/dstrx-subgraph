@@ -14,7 +14,7 @@ on:
 
 jobs:
   build:
-    runs-on: [ubuntu-latest]
+    runs-on: [blacksmith-2vcpu-ubuntu-2404]
     environment: prod
     steps:
       - name: Checkout
@@ -49,7 +49,7 @@ jobs:
     if: github.event_name != 'pull_request'
     needs: build
     environment: prod
-    runs-on: [ubuntu-latest]
+    runs-on: [blacksmith-2vcpu-ubuntu-2404]
     steps:
     - name: Checkout gitops repository
       uses: actions/checkout@v4
