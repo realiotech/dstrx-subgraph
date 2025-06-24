@@ -41,7 +41,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: ${{ vars.DO_IMAGE_REGISTRY_URL }}/kubernetes-stage/dstrx-subgraph:${{ github.sha }}-${{ github.run_number }}-${{ github.run_attempt }}
+          tags: ${{ vars.DO_IMAGE_REGISTRY_URL }}/kubernetes-stage/dstrx-subgraph:${{ github.sha }}-${{ github.run_number }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           file: docker/testnet.Dockerfile
@@ -59,15 +59,16 @@ jobs:
         ref: main
     - name: Update Kubernetes manifest
       run: |
-        if cat explorer-graph-node/base/dstrx-subgraph-job.yaml | grep ${{ github.sha }}-${{ github.run_number }}-${{ github.run_attempt }}; then
+        if cat explorer-graph-node/base/dstrx-subgraph-job.yaml | grep ${{ github.sha }}-${{ github.run_number }}; then
           echo "Image tag already exists in the manifest"
           exit 0
         fi
-        sed -i 's|image: .*$|image: '"registry.digitalocean.com/kubernetes-stage/dstrx-subgraph:${{ github.sha }}-${{ github.run_number }}-${{ github.run_attempt }}"'|' explorer-graph-node/base/dstrx-subgraph-job.yaml
+        sed -i 's|image: .*$|image: '"registry.digitalocean.com/kubernetes-stage/dstrx-subgraph:${{ github.sha }}-${{ github.run_number }}"'|' explorer-graph-node/base/dstrx-subgraph-job.yaml
         git config user.name 'github-actions-bot'
         git config user.email 'devops@realio.fund'
         git add .
-        git commit -m 'Update image tag to ${{ github.sha }}-${{ github.run_number }}-${{ github.run_attempt }}'
+        git commit -m 'Update image tag to ${{ github.sha }}-${{ github.run_number }}'
+        git pull --rebase
         git push
     env:
       GITHUB_TOKEN: ${{ secrets.GITOPS_PAT }}
