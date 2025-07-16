@@ -10,6 +10,15 @@ on:
       - '!docker/testnet*'
       - '!subgraph.testnet.yaml'
       - '!subgraph.yaml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '**'
+      - '!.github/**'
+      - '!docker/testnet*'
+      - '!subgraph.testnet.yaml'
+      - '!subgraph.yaml'
   workflow_dispatch:
 
 jobs:

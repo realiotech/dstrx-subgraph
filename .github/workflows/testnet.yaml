@@ -10,6 +10,15 @@ on:
       - '!docker/mainnet*'
       - '!subgraph.mainnet.yaml'
       - '!subgraph.yaml'
+  pull_request:
+    branches:
+      - stage
+    paths:
+      - '**'
+      - '!.github/**'
+      - '!docker/mainnet*'
+      - '!subgraph.mainnet.yaml'
+      - '!subgraph.yaml'
   workflow_dispatch:
 
 jobs:
