@@ -1,5 +1,6 @@
 # Use an official Node.js runtime as the base image
 FROM node:lts-alpine
+RUN npm i -g npm@11.19.0
 
 # Set the working directory
 WORKDIR /app
